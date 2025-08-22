@@ -168,8 +168,8 @@ const RegistrarseCliente2 = ({ navigation, route }) => {
   const registerUser = async (userData) => {
     try {
       console.log('🚀 Enviando datos al backend:', userData);
-      // ✅ RUTA CORREGIDA: Cambiada de /clientes/register a /api/register
-      const url = `${API_BASE_URL}/api/register`;
+      // ✅ RUTA CORREGIDA: Debe apuntar al registro de clientes
+      const url = `${API_BASE_URL}/api/register-cliente`;
       console.log('🌐 URL completa:', url);
       
       const response = await fetch(url, {
