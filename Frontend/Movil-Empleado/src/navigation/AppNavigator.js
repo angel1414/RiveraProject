@@ -9,6 +9,7 @@ import ViajesScreen from '../screens/ViajesScreen';
 import PerfilScreen from '../screens/PerfilScreen';
 import InfoViajeScreen from '../screens/InfoViajeScreen';
 import InicioSesionScreen from '../screens/InicioSesionScreen';
+import CotizacionesScreen from '../screens/CotizacionesScreen';
 
 // 🆕 IMPORTAR TU PANTALLA DE CARGA AQUÍ
 import PremiumLoadingScreen from '../screens/splashScreens'; // O CreativeTruckLoading
@@ -86,6 +87,13 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Viajes',
           tabBarBadge: null,
+        }}
+      />
+      <Tab.Screen 
+        name="Cotizaciones" 
+        component={CotizacionesScreen}
+        options={{
+          tabBarLabel: 'Cotizaciones',
         }}
       />
       <Tab.Screen 
