@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [userType, setUserType] = useState(null);
   const [user, setUser] = useState(null);
   const [sessionTimer, setSessionTimer] = useState(null);
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     checkAuthStatus();
@@ -34,14 +35,14 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('🔍 Verificando sesión de cliente guardada...');
       
-      const token = await AsyncStorage.getItem('clientToken');
+      const storedToken = await AsyncStorage.getItem('clientToken');
       const loginTime = await AsyncStorage.getItem('clientLoginTime');
       const onboardingCompleted = await AsyncStorage.getItem('onboardingCompleted');
       const userData = await AsyncStorage.getItem('clientData');
       const savedUserType = await AsyncStorage.getItem('clientUserType');
       const clientId = await AsyncStorage.getItem('clientId');
 
-      if (token && loginTime) {
+      if (storedToken && loginTime) {
         const currentTime = Date.now();
         const timeSinceLogin = currentTime - parseInt(loginTime);
         
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }) => {
           setHasCompletedOnboarding(onboardingCompleted === 'true');
           setUser(userData ? JSON.parse(userData) : null);
           setUserType(savedUserType);
+          setToken(storedToken);
           
           // Programar auto-logout
           startSessionTimer(remainingTime);
@@ -142,6 +144,7 @@ export const AuthProvider = ({ children }) => {
       setHasCompletedOnboarding(false);
       setUserType(null);
       setUser(null);
+      setToken(null);
       
       if (sessionTimer) {
         clearTimeout(sessionTimer);
@@ -192,6 +195,7 @@ export const AuthProvider = ({ children }) => {
       setUserType(loginData.userType);
       setIsAuthenticated(true);
       setHasCompletedOnboarding(true);
+      setToken(loginData.token || 'temp-client-token');
       
       // ⏰ INICIAR TIMER DE EXPIRACIÓN
       startSessionTimer();
@@ -244,6 +248,7 @@ export const AuthProvider = ({ children }) => {
       setUserType('Cliente');
       setIsAuthenticated(true);
       setHasCompletedOnboarding(false); // Mostrar onboarding para nuevos usuarios
+      setToken('temp-register-token');
       
       // ⏰ INICIAR TIMER DE EXPIRACIÓN
       startSessionTimer();
@@ -321,6 +326,7 @@ export const AuthProvider = ({ children }) => {
     isLoading,
     userType,
     user,
+    token,
     login,
     register,
     completeOnboarding,

@@ -83,7 +83,7 @@ const RegistrarseScreen = ({ navigation }) => {
 
   const handleGoToLogin = () => {
     console.log('Ir a login pressed');
-    navigation.navigate('InicioSesion');
+    navigation.navigate('Login');
   };
 
   return (

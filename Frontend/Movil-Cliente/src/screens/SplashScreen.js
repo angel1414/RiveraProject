@@ -8,9 +8,11 @@ import {
   Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../contenxt/authContext';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
+  const { isAuthenticated, hasCompletedOnboarding } = useAuth();
   
   // Animaciones
   const letterScale = useRef(new Animated.Value(0.8)).current;
@@ -54,18 +56,9 @@ const SplashScreen = () => {
     // Navegación después de la animación
     const checkAuthAndNavigate = async () => {
       try {
-        // Aquí puedes verificar si el usuario ya está logueado
-        // const userToken = await AsyncStorage.getItem('userToken');
-        // const isLoggedIn = userToken !== null;
-        
-        const isLoggedIn = false;
-        
+        const target = isAuthenticated ? (hasCompletedOnboarding ? 'Main' : 'pantallacarga1') : 'Login';
         setTimeout(() => {
-          if (isLoggedIn) {
-            navigation.replace('Main');
-          } else {
-            navigation.replace('Login');
-          }
+          navigation.replace(target);
         }, 3000); // 3 segundos
         
       } catch (error) {
@@ -77,7 +70,7 @@ const SplashScreen = () => {
     };
 
     checkAuthAndNavigate();
-  }, [navigation]);
+  }, [navigation, isAuthenticated, hasCompletedOnboarding]);
 
   return (
     <SafeAreaView style={styles.container}>
