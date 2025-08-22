@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useAuth } from '../contenxt/authContext';
 
 // ✅ CONFIGURACIÓN DE LA API - CORREGIDA
 const API_BASE_URL = 'https://riveraproject-5.onrender.com';
@@ -18,6 +19,7 @@ const API_BASE_URL = 'https://riveraproject-5.onrender.com';
 const RegistrarseCliente2 = ({ navigation, route }) => {
   // ✅ OBTENER DATOS DE LA PANTALLA ANTERIOR
   const { email, password } = route.params || {};
+  const { register } = useAuth();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -168,8 +170,8 @@ const RegistrarseCliente2 = ({ navigation, route }) => {
   const registerUser = async (userData) => {
     try {
       console.log('🚀 Enviando datos al backend:', userData);
-      // ✅ RUTA CORREGIDA: Cambiada de /clientes/register a /api/register
-      const url = `${API_BASE_URL}/api/register`;
+      // ✅ RUTA CORREGIDA: usar endpoint de clientes
+      const url = `${API_BASE_URL}/api/register-cliente`;
       console.log('🌐 URL completa:', url);
       
       const response = await fetch(url, {
@@ -278,6 +280,16 @@ const RegistrarseCliente2 = ({ navigation, route }) => {
       
       if (result.success) {
         console.log('✅ Registro exitoso!');
+        
+        try {
+          await register({
+            id: result?.data?.user?.id,
+            email: result?.data?.user?.email,
+            nombre: result?.data?.user?.nombre,
+          });
+        } catch (e) {
+          console.log('⚠️ No se pudo establecer sesión tras registro:', e);
+        }
         
         Alert.alert(
           'Éxito', 
